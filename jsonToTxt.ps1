@@ -1,36 +1,37 @@
-$jsonFilePath = "C:\Users\Duder5000\Downloads\O_1260.json"
-$txtOutputFilePath = "C:\Users\Duder5000\Downloads\output.txt"
+$jsonFolderPath = "C:\Users\Duder5000\Downloads\JsonFiles"
+$outputFolderPath = "C:\Users\Duder5000\Downloads\OutputFiles"
 
-# Load the JSON file
-$jsonContent = Get-Content -Raw -Path $jsonFilePath | ConvertFrom-Json
+# Get all JSON files in the specified folder
+$jsonFiles = Get-ChildItem -Path $jsonFolderPath -Filter *.json
 
-$allShapes = @()
+foreach ($jsonFile in $jsonFiles) {
+    # Generate output file path based on the input file name
+    $outputFileName = [System.IO.Path]::ChangeExtension($jsonFile.BaseName, 'txt')
+    $outputFilePath = Join-Path -Path $outputFolderPath -ChildPath $outputFileName
 
-# Iterate through each shape and create a custom object
-foreach ($shape in $jsonContent.shapes) {
-    
-    #Write-Host $shape.points
-    #Write-Host $shape.points[0][0]
-    $x1 = $shape.points[0][0]
-    #Write-Host $shape.points[0][1]
-    $y1 = $shape.points[0][1]
-    #Write-Host $shape.points[1][0]
-    $x2 = $shape.points[1][0]
-    #Write-Host $shape.points[1][1]
-    $y2 = $shape.points[1][1]
+    # Load the JSON file
+    $jsonContent = Get-Content -Raw -Path $jsonFile.FullName | ConvertFrom-Json
 
-    $pointsForThisShape = $x1.ToString() + ", " + $y1.ToString() + ", " + $x2.ToString() + ", " + $y2.ToString()
-    #Write-Host $pointsForThisShape
+    $allShapes = @()
 
-    $shapeInfo = [PSCustomObject]@{
-        ShapeType = $shape.shape_type
-        Label     = $shape.label
-        #Points    = $shape.points -join ','
-        Points    = $pointsForThisShape -join ','
+    # Iterate through each shape and create a custom object
+    foreach ($shape in $jsonContent.shapes) {
+        $x1 = $shape.points[0][0]
+        $y1 = $shape.points[0][1]
+        $x2 = $shape.points[1][0]
+        $y2 = $shape.points[1][1]
+
+        $pointsForThisShape = "$x1, $y1, $x2, $y2"
+
+        $shapeInfo = [PSCustomObject]@{
+            ShapeType = $shape.shape_type
+            Label     = $shape.label
+            Points    = $pointsForThisShape -join ','
+        }
+
+        $allShapes += $shapeInfo
     }
 
-    $allShapes += $shapeInfo
+    # Output the shape information to a text file
+    $allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
 }
-
-# Output the shape information to a text file
-$allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $txtOutputFilePath -Encoding UTF8
