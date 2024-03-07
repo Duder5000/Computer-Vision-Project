@@ -1,6 +1,11 @@
 $jsonFolderPath = "C:\Users\Duder5000\Downloads\JsonFiles"
 $outputFolderPath = "C:\Users\Duder5000\Downloads\OutputFiles"
 
+# Ensure the output folder exists, create it if necessary
+if (-not (Test-Path -Path $outputFolderPath -PathType Container)) {
+    New-Item -ItemType Directory -Path $outputFolderPath | Out-Null
+}
+
 # Get all JSON files in the specified folder
 $jsonFiles = Get-ChildItem -Path $jsonFolderPath -Filter *.json
 
