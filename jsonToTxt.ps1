@@ -1,5 +1,8 @@
+$jsonFilePath = "C:\Users\Duder5000\Downloads\O_1260.json"
+$txtOutputFilePath = "C:\Users\Duder5000\Downloads\output.txt"
+
 # Load the JSON file
-$jsonContent = Get-Content -Raw -Path "C:\Users\Duder5000\Downloads\O_1260.json" | ConvertFrom-Json
+$jsonContent = Get-Content -Raw -Path $jsonFilePath | ConvertFrom-Json
 
 $allShapes = @()
 
@@ -30,4 +33,4 @@ foreach ($shape in $jsonContent.shapes) {
 }
 
 # Output the shape information to a text file
-$allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath "C:\Users\Duder5000\Downloads\output.txt" -Encoding UTF8
+$allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $txtOutputFilePath -Encoding UTF8
