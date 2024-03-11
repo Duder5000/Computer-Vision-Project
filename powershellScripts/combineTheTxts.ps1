@@ -17,7 +17,12 @@ foreach ($infoFile in $infoFiles) {
     # Check if the corresponding file in $dimsFolderPath exists
     if (Test-Path -Path $dimsFilePath -PathType Leaf) {
         # Read the content of both files, combine with a new line, and save to the output folder
-        $combinedContent = (Get-Content -Path $dimsFilePath) + "`n" + (Get-Content -Path $infoFile.FullName)
+        $contentInfo = Get-Content -Path $infoFile.FullName -Raw
+        $contentDims = Get-Content -Path $dimsFilePath -Raw
+
+        # Combine the content and remove extra new lines
+        $combinedContent = "$contentDims`n$contentInfo" -replace "(\r\n?|\n){2,}", "`n"
+
         $combinedFilePath = Join-Path -Path $outputFolderPath -ChildPath $infoFile.Name
         $combinedContent | Set-Content -Path $combinedFilePath
     }
