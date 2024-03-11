@@ -1,5 +1,5 @@
-$jsonFolderPath = "C:\Users\Duder5000\Downloads\JsonFiles"
-$outputFolderPath = "C:\Users\Duder5000\Downloads\OutputFiles"
+$jsonFolderPath = "D:\Downloads\JsonFiles"
+$outputFolderPath = "D:\Downloads\OutputFiles"
 
 # Ensure the output folder exists, create it if necessary
 if (-not (Test-Path -Path $outputFolderPath -PathType Container)) {
@@ -38,5 +38,6 @@ foreach ($jsonFile in $jsonFiles) {
     }
 
     # Output the shape information to a text file
-    $allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
+    #$allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
+	$allShapes | ForEach-Object { "$($jsonFile.BaseName), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
 }
