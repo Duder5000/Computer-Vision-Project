@@ -39,5 +39,5 @@ foreach ($jsonFile in $jsonFiles) {
 
     # Output the shape information to a text file
     #$allShapes | ForEach-Object { "$($_.ShapeType), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
-	$allShapes | ForEach-Object { "$($jsonFile.BaseName), $($_.Label), $($_.Points)" } | Out-File -FilePath $outputFilePath -Encoding UTF8
+	$allShapes | ForEach-Object { "$($jsonFile.BaseName), $($_.Label), $($_.Points)\n" } | Out-File -FilePath $outputFilePath -Encoding UTF8
 }
