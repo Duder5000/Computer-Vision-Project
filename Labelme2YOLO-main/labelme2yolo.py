@@ -187,7 +187,7 @@ class Labelme2YOLO(object):
 
     #     return label_id, yolo_center_x, yolo_center_y, yolo_w, yolo_h
 
-    def _get_circle_shape_yolo_object(self, shape, img_h, img_w):
+def _get_circle_shape_yolo_object(self, shape, img_h, img_w):
     label_id = self._label_id_map[shape['label']]
     obj_center_x, obj_center_y = shape['points'][0]
 
@@ -238,6 +238,7 @@ class Labelme2YOLO(object):
     yolo_height = round(float((y_max - y_min) / img_h), 6)
 
     return label_id, yolo_center_x, yolo_center_y, yolo_width, yolo_height
+
 
     def _get_other_shape_yolo_object(self, shape, img_h, img_w):
         label_id = self._label_id_map[shape['label']]
